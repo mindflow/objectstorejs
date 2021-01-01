@@ -15,8 +15,22 @@ export default [{
         multiEntry(),
         postprocess([
             [/(?<=import\s*(.*)\s*from\s*)['"]((?!.*[.]js).*)['"];/, '\'./$2.js\'']
+        ])
+    ]
+},{
+    input: "src/**/*.js",
+    external: [ 'coreutil_v1','containerbridge_v1' ],
+    output: {
+        name: 'objectstore_v1',
+        file: "dist/jsm/objectstore_v1.min.js",
+        format: "es"
+    },
+    plugins: [
+        multiEntry(),
+        postprocess([
+            [/(?<=import\s*(.*)\s*from\s*)['"]((?!.*[.]js).*)['"];/, '\'./$2.js\'']
         ]),
-        //uglify()
+        uglify()
     ]
 },{
     input: "src/**/*.js",

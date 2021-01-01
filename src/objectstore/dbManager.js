@@ -42,6 +42,16 @@ export class DBManager {
         });
     }
 
+    /**
+     * @returns {Object}
+     */
+    static mapEntity(type, dataObject) {
+        if (dataObject) {
+            return Object.assign(new type, dataObject);
+        }
+        return null;
+    }
+
 
     /**
      * 
@@ -103,7 +113,7 @@ export class DBManager {
         const userStore = transaction.objectStore(storeName);
         const getRequest = userStore.get(key);
         return new Promise((resolve, reject) => {
-            getRequest.onsuccess = () => { resolve(Object.assign(new type,getRequest.result)); };
+            getRequest.onsuccess = () => { resolve(DBManager.mapEntity(type, getRequest.result)); };
             getRequest.onerror = (error) => { reject(error); };
         });
     }
