@@ -38,7 +38,7 @@ export class DBManager {
             openRequest.onsuccess = () => {
                 resolve(new DBManager(openRequest.result));
             }
-            openRequest.onupgradeneeded = dbConfigurer.updgrade;
+            openRequest.onupgradeneeded = dbConfigurer.updgrade.bind(dbConfigurer);
         });
     }
 

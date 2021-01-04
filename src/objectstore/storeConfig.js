@@ -52,7 +52,7 @@ export class StoreConfig {
          */
         withIndex(name, path, unique) {
             this.indexList.add(new IndexConfig(name, path, unique));
-            return true;
+            return this;
         }
 
 }
