@@ -1,4 +1,5 @@
 import { Map, ObjectFunction } from "coreutil_v1";
+import { ContainerDatabaseStorage } from "containerbridge_v1";
 import { DBConfigurer } from "./dbConfigurer.js";
 import { StoreConfig } from "./storeConfig.js";
 import { SubscriptionManager } from "./subscriptionManager.js";
@@ -30,7 +31,7 @@ export class DBManager {
     static fromStore(dbName, storeConfig) {
         const dbConfigurer = new DBConfigurer(storeConfig);
         return new Promise((resolve, reject) => {
-            const openRequest = window.indexedDB.open(dbName, 1);
+            const openRequest = ContainerDatabaseStorage.open(dbName, 1);
             openRequest.onerror = (error) => {
                 LOG.error(error);
                 reject(error);
