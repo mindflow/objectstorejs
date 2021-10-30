@@ -5,27 +5,15 @@ export class StoreConfig {
 
     constructor() {
 
-        /** @type {Number} */
-        this.version = 1;
-
         /** @type {String} */
         this.storeName = null;
 
         /** @type {String} */
         this.keyPath = null;
 
-        /** @type {List} */
+        /** @type {List<IndexConfig>} */
         this.indexList = new List();
 
-    }
-
-    /**
-     * 
-     * @param {Number} version 
-     */
-    withVersion(version) {
-        this.version = version;
-        return this;
     }
 
     /**

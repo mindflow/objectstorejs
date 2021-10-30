@@ -3,6 +3,7 @@ import { ContainerDatabaseStorage } from "containerbridge_v1";
 import { DBConfigurer } from "./dbConfigurer.js";
 import { StoreConfig } from "./storeConfig.js";
 import { SubscriptionManager } from "./subscriptionManager.js";
+import { DbConfig } from "./DbConfig.js";
 
 /**
  * Manages a database with 0 to many stores
@@ -25,13 +26,13 @@ export class DBManager {
     /**
      * 
      * @param {String} dbName 
-     * @param {StoreConfig} storeConfig 
+     * @param {DbConfig} dbConfig 
      * @return {Promise}
      */
-    static fromStore(dbName, storeConfig) {
-        const dbConfigurer = new DBConfigurer(storeConfig);
+    static fromStore(dbName, dbConfig) {
+        const dbConfigurer = new DBConfigurer(dbConfig);
         return new Promise((resolve, reject) => {
-            const openRequest = ContainerDatabaseStorage.open(dbName, 1);
+            const openRequest = ContainerDatabaseStorage.open(dbName, dbConfig.version);
             openRequest.onerror = (error) => {
                 LOG.error(error);
                 reject(error);

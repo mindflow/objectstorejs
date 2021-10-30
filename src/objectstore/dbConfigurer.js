@@ -1,4 +1,5 @@
 import { Logger } from "coreutil_v1";
+import { DbConfig } from "./DbConfig";
 
 const LOG = new Logger("StoreConfig");
 
@@ -6,10 +7,10 @@ export class DBConfigurer {
 
     /**
      * 
-     * @param {StoreConfig} storeConfig 
+     * @param {DbConfig} dbConfig 
      */
-    constructor(storeConfig) {
-        this.storeConfig = storeConfig;
+    constructor(dbConfig) {
+        this.dbConfig = dbConfig;
     }
 
     /**
@@ -22,20 +23,30 @@ export class DBConfigurer {
         /** @type {IDBDatabase} */
         const db = versionChangeEvent.target.result;
 
-        if (db.objectStoreNames.contains(this.storeConfig.storeName)) {
-            db.deleteObjectStore(this.storeConfig.storeName);
-        }
+        this.dbConfig.storeConfigList.forEach((storeConfig) => {
 
-        const store = db.createObjectStore(
-            this.storeConfig.storeName, 
-            { keyPath: this.storeConfig.keyPath }
-        );
+            // Clear the old
+            if (db.objectStoreNames.contains(storeConfig.storeName)) {
+                db.deleteObjectStore(storeConfig.storeName);
+            }
+    
+            // Create the new
+            const store = db.createObjectStore(
+                storeConfig.storeName, 
+                { keyPath: storeConfig.keyPath }
+            );
+    
+            storeConfig.indexList.forEach((indexConfig) => {
+                const index = store.createIndex(
+                    indexConfig.name, 
+                    indexConfig.path, 
+                    {unique: indexConfig.unique}
+                );
+                return true;
+            })
 
-        const index = store.createIndex(
-            this.storeConfig.indexName, 
-            this.storeConfig.indexPath, 
-            {unique: this.storeConfig.indexUnique}
-        );
+            return true;
+        });
     }
 
 }
