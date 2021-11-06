@@ -1,9 +1,8 @@
 import { Map, ObjectFunction } from "coreutil_v1";
 import { ContainerDatabaseStorage } from "containerbridge_v1";
 import { DBConfigurer } from "./dbConfigurer.js";
-import { StoreConfig } from "./storeConfig.js";
 import { SubscriptionManager } from "./subscriptionManager.js";
-import { DbConfig } from "./DbConfig.js";
+import { DbConfig } from "./dbConfig.js";
 
 /**
  * Manages a database with 0 to many stores
@@ -19,7 +18,7 @@ export class DBManager {
         /** @type {IDBDatabase} */
         this.db = db;
 
-        /** @type {Map} */
+        /** @type {Map<SubscriptionManager>} */
         this.subscriptionManagerMap = new Map();
     }
 
@@ -88,7 +87,6 @@ export class DBManager {
     /**
      * @param {Object} entity
      * @param {String} storeName
-     * @param {String} transactionType
      * @return {Promise}
      */
     putEntity(entity, storeName) {
@@ -123,6 +121,7 @@ export class DBManager {
     /**
      * 
      * @param {String} key 
+     * @param {String} storeName
      * @returns {Promise}
      */
     deleteEntity(key, storeName) {
@@ -154,13 +153,13 @@ export class DBManager {
      * removed.
      * 
      * @type {String} storeName
-     * @type {ObjectFunction} objectFunction
+     * @type {ObjectFunction} putObjectFunction
      */
-    subscribePut(storeName, objectFunction) {
+    subscribePut(storeName, putObjectFunction) {
         if (!this.subscriptionManagerMap.contains(storeName)) {
             this.subscriptionManagerMap.set(storeName, new SubscriptionManager());
         }
-        this.subscriptionManagerMap.get(storeName).subscribe(objectFunction);
+        this.subscriptionManagerMap.get(storeName).subscribePut(putObjectFunction);
     }
 
     /**
@@ -169,14 +168,13 @@ export class DBManager {
      * removed.
      * 
      * @type {String} storeName
-     * @type {ObjectFunction} putObjectFunction
      * @type {ObjectFunction} deleteObjectFunction
      */
-    subscribe(putObjectFunction, deleteObjectFunction, storeName) {
+    subscribeDelete(storeName, deleteObjectFunction) {
         if (!this.subscriptionManagerMap.contains(storeName)) {
             this.subscriptionManagerMap.set(storeName, new SubscriptionManager());
         }
-        this.subscriptionManagerMap.get(storeName).subscribe(putObjectFunction, deleteObjectFunction);
+        this.subscriptionManagerMap.get(storeName).subscribeDelete(deleteObjectFunction);
     }
 
 }

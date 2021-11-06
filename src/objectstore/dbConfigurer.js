@@ -1,5 +1,5 @@
 import { Logger } from "coreutil_v1";
-import { DbConfig } from "./DbConfig";
+import { DbConfig } from "./dbConfig";
 
 const LOG = new Logger("StoreConfig");
 

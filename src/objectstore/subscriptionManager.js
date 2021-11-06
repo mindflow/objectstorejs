@@ -13,12 +13,21 @@ export class SubscriptionManager {
      * removed.
      * 
      * @param {ObjectFunction} putSubscriber 
-     * @param {ObjectFunction} deleteSubscriber 
      */
-    subscribe(putSubscriber, deleteSubscriber) {
+    subscribePut(putSubscriber) {
         if (putSubscriber instanceof ObjectFunction) {
             this.putSubscribers.add(new WeakRef(putSubscriber));
         }
+    }
+
+    /**
+     * Subscribers are weakly referenced. Keep a reference to the 
+     * instance of the ObjectFunction to ensure it is not automatically
+     * removed.
+     * 
+     * @param {ObjectFunction} deleteSubscriber 
+     */
+     subscribeDelete(deleteSubscriber) {
         if (deleteSubscriber instanceof ObjectFunction) {
             this.deleteSubscribers.add(new WeakRef(deleteSubscriber));
         }
