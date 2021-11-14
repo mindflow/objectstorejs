@@ -95,13 +95,18 @@ export class DBManager {
         const putRequest = store.put(entity);
         const context = this;
         return new Promise((resolve, reject) => {
-            putRequest.onsuccess = () => { context.notifyPut(entity, storeName); resolve(entity); };
-            putRequest.onerror = (error) => { reject(error); };
+            putRequest.onsuccess = () => {
+                context.notifyPut(entity, storeName);
+                resolve(entity);
+            };
+            putRequest.onerror = (error) => {
+                reject(error);
+            };
         });
     }
 
 
-        /**
+    /**
      * 
      * @param {String} key 
      * @param {String} storeName
@@ -113,8 +118,12 @@ export class DBManager {
         const userStore = transaction.objectStore(storeName);
         const getRequest = userStore.get(key);
         return new Promise((resolve, reject) => {
-            getRequest.onsuccess = () => { resolve(DBManager.mapEntity(type, getRequest.result)); };
-            getRequest.onerror = (error) => { reject(error); };
+            getRequest.onsuccess = () => {
+                resolve(DBManager.mapEntity(type, getRequest.result));
+            };
+            getRequest.onerror = (error) => {
+                reject(error);
+            };
         });
     }
 
@@ -130,8 +139,13 @@ export class DBManager {
         const deleteRequest = store.delete(key);
         const context = this;
         return new Promise((resolve, reject) => {
-            deleteRequest.onsuccess = () => {  context.notifyDelete(key, storeName); resolve(deleteRequest.result); };
-            deleteRequest.onerror = (error) => {reject(error); };
+            deleteRequest.onsuccess = () => {
+                context.notifyDelete(key, storeName);
+                resolve(deleteRequest.result);
+            };
+            deleteRequest.onerror = (error) => {
+                reject(error);
+            };
         });
     }
 
