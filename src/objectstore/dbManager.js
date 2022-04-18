@@ -1,4 +1,4 @@
-import { Map, ObjectFunction } from "coreutil_v1";
+import { Map, Method } from "coreutil_v1";
 import { ContainerDatabaseStorage } from "containerbridge_v1";
 import { DBConfigurer } from "./dbConfigurer.js";
 import { SubscriptionManager } from "./subscriptionManager.js";
@@ -163,32 +163,32 @@ export class DBManager {
 
     /**
      * Subscribers are weakly referenced. Keep a reference to the 
-     * instance of the ObjectFunction to ensure it is not automatically
+     * instance of the Method to ensure it is not automatically
      * removed.
      * 
      * @type {String} storeName
-     * @type {ObjectFunction} putObjectFunction
+     * @type {Method} putMethod
      */
-    subscribePut(storeName, putObjectFunction) {
+    subscribePut(storeName, putMethod) {
         if (!this.subscriptionManagerMap.contains(storeName)) {
             this.subscriptionManagerMap.set(storeName, new SubscriptionManager());
         }
-        this.subscriptionManagerMap.get(storeName).subscribePut(putObjectFunction);
+        this.subscriptionManagerMap.get(storeName).subscribePut(putMethod);
     }
 
     /**
      * Subscribers are weakly referenced. Keep a reference to the 
-     * instance of the ObjectFunction to ensure it is not automatically
+     * instance of the Method to ensure it is not automatically
      * removed.
      * 
      * @type {String} storeName
-     * @type {ObjectFunction} deleteObjectFunction
+     * @type {Method} deleteMethod
      */
-    subscribeDelete(storeName, deleteObjectFunction) {
+    subscribeDelete(storeName, deleteMethod) {
         if (!this.subscriptionManagerMap.contains(storeName)) {
             this.subscriptionManagerMap.set(storeName, new SubscriptionManager());
         }
-        this.subscriptionManagerMap.get(storeName).subscribeDelete(deleteObjectFunction);
+        this.subscriptionManagerMap.get(storeName).subscribeDelete(deleteMethod);
     }
 
 }

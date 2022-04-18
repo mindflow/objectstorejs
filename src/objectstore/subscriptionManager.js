@@ -1,4 +1,4 @@
-import { List, ObjectFunction } from "coreutil_v1";
+import { List, Method } from "coreutil_v1";
 
 export class SubscriptionManager {
 
@@ -9,26 +9,26 @@ export class SubscriptionManager {
 
     /**
      * Subscribers are weakly referenced. Keep a reference to the 
-     * instance of the ObjectFunction to ensure it is not automatically
+     * instance of the Method to ensure it is not automatically
      * removed.
      * 
-     * @param {ObjectFunction} putSubscriber 
+     * @param {Method} putSubscriber 
      */
     subscribePut(putSubscriber) {
-        if (putSubscriber instanceof ObjectFunction) {
+        if (putSubscriber instanceof Method) {
             this.putSubscribers.add(new WeakRef(putSubscriber));
         }
     }
 
     /**
      * Subscribers are weakly referenced. Keep a reference to the 
-     * instance of the ObjectFunction to ensure it is not automatically
+     * instance of the Method to ensure it is not automatically
      * removed.
      * 
-     * @param {ObjectFunction} deleteSubscriber 
+     * @param {Method} deleteSubscriber 
      */
      subscribeDelete(deleteSubscriber) {
-        if (deleteSubscriber instanceof ObjectFunction) {
+        if (deleteSubscriber instanceof Method) {
             this.deleteSubscribers.add(new WeakRef(deleteSubscriber));
         }
     }
@@ -36,7 +36,7 @@ export class SubscriptionManager {
     notifyPut(entity) {
         let toRemoveArray = [];
         this.putSubscribers.forEach((weakRefSubscriber, parent) => {
-            /** @type {ObjectFunction} */
+            /** @type {Method} */
             let subscriber = weakRefSubscriber.deref();
             if (!subscriber) {
                 toRemoveArray.push(weakRefSubscriber);
@@ -53,7 +53,7 @@ export class SubscriptionManager {
     notifyDelete(key) {
         let toRemoveArray = [];
         this.deleteSubscribers.forEach((weakRefSubscriber, parent) => {
-            /** @type {ObjectFunction} */
+            /** @type {Method} */
             let subscriber = weakRefSubscriber.deref();
             if (!subscriber) {
                 toRemoveArray.push(weakRefSubscriber);
